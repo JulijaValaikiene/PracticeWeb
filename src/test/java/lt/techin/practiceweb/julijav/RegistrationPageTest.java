@@ -1,8 +1,10 @@
 package lt.techin.practiceweb.julijav;
 
+import ch.qos.logback.classic.Logger;
 import lt.techin.lt.practiceweb.julijav.*;
+import lt.techin.practiceweb.julijav.utils.TestUtils;
 import org.junit.jupiter.api.Test;
-import org.apache.commons.lang3.RandomStringUtils;
+import org.slf4j.LoggerFactory;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -11,32 +13,24 @@ public class RegistrationPageTest extends BasePageTest {
     RegistrationPage registrationPage;
     SuccessfullyRegistrationPage successfullyRegistrationPage;
     LoginPage loginPage;
-    AccountPage accountPage;
     String userName = "Martin";
     String userPassword = "Martin159";
     String userEmail = "martin321@gmail.com";
+    String shortUserPassword = "123";
+    String wrongUserName = "aaa";
 
-
-    protected String getRandomEmail() {
-        String upperLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-        String lowerLetters = "abcdefghijklmnopqrstuvwxyz";
-        String numbers = "1234567890";
-
-        return RandomStringUtils.random(1, upperLetters)
-                + RandomStringUtils.random(5, lowerLetters)
-                + RandomStringUtils.random(3, numbers)
-                + System.currentTimeMillis()
-                + "@gmail.com";
-    }
+    private final Logger log = (Logger) LoggerFactory.getLogger(RegistrationPageTest.class);
 
     @Test
     public void randomUserRegistration() {
+
         mainPage = new MainPage(driver);
         registrationPage = new RegistrationPage(driver);
         successfullyRegistrationPage = new SuccessfullyRegistrationPage(driver);
         loginPage = new LoginPage(driver);
+
         mainPage.clickCreateAccountButton();
-        registrationPage.enterEmailAddress(getRandomEmail());
+        registrationPage.enterEmailAddress(TestUtils.getRandomEmail());
         registrationPage.enterName(userName);
         registrationPage.enterPassword(userPassword);
         registrationPage.enterConfirmPassword(userPassword);
@@ -45,19 +39,63 @@ public class RegistrationPageTest extends BasePageTest {
         assertEquals("User account created successfully", successfullyRegistrationPage.getRegistrationConfirmationMessage(), "Successfully registration should have this message 'User account created successfully'");
         successfullyRegistrationPage.clickLoginButton();
         assertEquals("Login", loginPage.findDesignLoginElementText(), "login element text should be 'Login' !!! ");
+        log.info("Registration is successfully done!");
     }
 
     @Test
-    public void userLogin() {
+    public void existingUserRegistration() {
+
+        mainPage = new MainPage(driver);
+        registrationPage = new RegistrationPage(driver);
+        successfullyRegistrationPage = new SuccessfullyRegistrationPage(driver);
         loginPage = new LoginPage(driver);
-        accountPage = new AccountPage(driver);
-        loginPage.clickLoginButtonMainPage();
-        loginPage.enterEmail(userEmail);
-        loginPage.enterPassword(userPassword);
-        loginPage.clickLoginButton();
-        accountPage.clickProfileButton();
-//        String actualUserName = accountPage.getNameFromProfileSettings();
-//        assertEquals(userName, actualUserName, "Name should be the same: Martin !!!");
+
+        mainPage.clickCreateAccountButton();
+        registrationPage.enterEmailAddress(userEmail);
+        registrationPage.enterName(userName);
+        registrationPage.enterPassword(userPassword);
+        registrationPage.enterConfirmPassword(userPassword);
+        registrationPage.clickRegisterButton();
+        assertEquals("An account already exists with the same email address", registrationPage.errorMessageExistingEmailText(), "Error message should be 'An account already exists with the same email address'!!!");
+        log.info("Registration with existing email brings error message! Test passed!");
+    }
+
+    @Test
+    public void wrongUserNameRegistration() {
+
+        mainPage = new MainPage(driver);
+        registrationPage = new RegistrationPage(driver);
+        successfullyRegistrationPage = new SuccessfullyRegistrationPage(driver);
+        loginPage = new LoginPage(driver);
+
+        mainPage.clickCreateAccountButton();
+        registrationPage.enterEmailAddress(TestUtils.getRandomEmail());
+        registrationPage.enterName(wrongUserName);
+//        registrationPage.enterName("aaa");
+        registrationPage.enterPassword(userPassword);
+        registrationPage.enterConfirmPassword(userPassword);
+        registrationPage.clickRegisterButton();
+        assertEquals("User name should be between 4 and 30 characters", registrationPage.errorMessageWrongNameText(), "Wrong Name error message should include this text: 'User name should be between 4 and 30 characters'");
+        log.info("Error message displayed. Test - PASSED!");
+      }
+
+    @Test
+    public void shortPasswordRegistration() {
+
+        mainPage = new MainPage(driver);
+        registrationPage = new RegistrationPage(driver);
+        successfullyRegistrationPage = new SuccessfullyRegistrationPage(driver);
+        loginPage = new LoginPage(driver);
+
+        mainPage.clickCreateAccountButton();
+        registrationPage.enterEmailAddress(TestUtils.getRandomEmail());
+        registrationPage.enterName(userName);
+        registrationPage.enterPassword(shortUserPassword);
+        registrationPage.enterConfirmPassword(shortUserPassword);
+        registrationPage.clickRegisterButton();
+        assertEquals("Password should be between 6 and 30 characters", registrationPage.errorMessageShortPasswordText(), "If password is too short - under input message should include 'Password should be between 6 and 30 characters'!!! ");
+        log.info("Error message displayed. Test - PASSED!!");
 
     }
+
 }

@@ -15,12 +15,18 @@ public class AccountPage extends BasePage {
     @FindBy(css = "input[name='name']")
     WebElement nameFromProfileSettings;
 
+    @FindBy(xpath = "//*[@id='navbarSupportedContent']//button")
+    WebElement logOutButton;
+
     public void clickProfileButton() {
         profileButton.click();
     }
 
     public String getNameFromProfileSettings() {
-        return nameFromProfileSettings.getCssValue("name");
+        return nameFromProfileSettings.getAttribute("value");
     }
 
+    public void clickLogoutButton() {
+        logOutButton.click();
+    }
 }
