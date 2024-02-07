@@ -30,10 +30,10 @@ public class RegistrationPage extends BasePage {
     WebElement errorMessageExistingEmail;
 
     @FindBy(xpath = "//*[@id=\"root\"]/div/div/div/div/form/div[1]/div[2]/div[1]/div")
-    WebElement getErrorMessageShortPassword;
+    WebElement errorMessageShortPassword;
 
     @FindBy (xpath = "//*[@id=\"root\"]/div/div/div/div/form/div[1]/div[1]/div[2]/div")
-    WebElement getErrorMessageWrongName;
+    WebElement errorMessageWrongName;
 
     public void enterEmailAddress(String userEmail) {
         emailInput.sendKeys(userEmail);
@@ -56,20 +56,20 @@ public class RegistrationPage extends BasePage {
 
     }
 
-    public String findRegistrationElementText() {
+    public String getRegistrationElementText() {
         return registrationElement.getText();
 
     }
-    public String errorMessageExistingEmailText() {
+    public String getErrorMessageExistingEmailText() {
         return errorMessageExistingEmail.getText();
 
     }
-    public String errorMessageShortPasswordText() {
-        return getErrorMessageShortPassword.getText();
+    public String getErrorMessageShortPasswordText() {
+        return errorMessageShortPassword.getText();
 
     }
-    public String errorMessageWrongNameText() {
-        return getErrorMessageWrongName.getText();
+    public String getErrorMessageWrongNameText() {
+        return errorMessageWrongName.getText();
 
     }
 
