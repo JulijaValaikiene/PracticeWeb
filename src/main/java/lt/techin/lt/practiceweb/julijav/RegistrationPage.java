@@ -4,6 +4,10 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.ArrayList;
+import java.util.List;
+
+
 public class RegistrationPage extends BasePage {
     public RegistrationPage(WebDriver driver) {
         super(driver);
@@ -20,7 +24,7 @@ public class RegistrationPage extends BasePage {
     @FindBy(id = "confirmPassword")
     WebElement confirmPassword;
 
-    @FindBy(xpath = "//div[@id='root']//button[@type='submit']")
+    @FindBy(xpath = "//button[text()='Register']")
     WebElement registerButton;
 
     @FindBy(xpath = "//h1[.='Register']")
@@ -32,8 +36,9 @@ public class RegistrationPage extends BasePage {
     @FindBy(xpath = "//*[@id=\"root\"]/div/div/div/div/form/div[1]/div[2]/div[1]/div")
     WebElement errorMessageShortPassword;
 
-    @FindBy (xpath = "//*[@id=\"root\"]/div/div/div/div/form/div[1]/div[1]/div[2]/div")
+    @FindBy(xpath = "//*[@id=\"root\"]/div/div/div/div/form/div[1]/div[1]/div[2]/div")
     WebElement errorMessageWrongName;
+
 
     public void enterEmailAddress(String userEmail) {
         emailInput.sendKeys(userEmail);
@@ -60,18 +65,65 @@ public class RegistrationPage extends BasePage {
         return registrationElement.getText();
 
     }
+//    public boolean isDisplayedRegistrationElement() {
+//         registrationElement.isDisplayed();
+//
+//    }
+
+
     public String getErrorMessageExistingEmailText() {
         return errorMessageExistingEmail.getText();
 
     }
+
     public String getErrorMessageShortPasswordText() {
         return errorMessageShortPassword.getText();
 
     }
+
     public String getErrorMessageWrongNameText() {
         return errorMessageWrongName.getText();
 
     }
 
 
+
+    @FindBy(xpath = "//div[@class='invalid-feedback']")
+    List<WebElement> registrationAllErrorMessages;
+    @FindBy(xpath = "//input")
+    WebElement errorEmptyRegistration;
+
+
+
+    public boolean isRegistrationFormEmpty() {
+
+        return errorEmptyRegistration.isDisplayed();
+    }
+
+    public boolean isErrorMessageDisplayed(String errorMessageText) {
+        ArrayList<String> newErrorMessages = new ArrayList<>();
+        for (WebElement errorMessage : registrationAllErrorMessages) {
+            newErrorMessages.add(errorMessage.getText());
+        }
+        return newErrorMessages.contains(errorMessageText);
+    }
 }
+
+//    @FindBy(css = "input#user-email")
+//    WebElement profileEmail;
+//    public String getProfileEmail(){
+//    return profileEmail.getAttribute("value");
+//}
+
+//    @FindBy(css = ".btn.btn-outline-danger")
+//    WebElement logoutButton;
+//    public boolean isThereLogoutButton() {
+//    return logoutButton.isDisplayed();
+//    }
+
+
+
+
+
+
+

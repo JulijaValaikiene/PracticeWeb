@@ -4,9 +4,15 @@ import ch.qos.logback.classic.Logger;
 import lt.techin.lt.practiceweb.julijav.*;
 import lt.techin.practiceweb.julijav.utils.TestUtils;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
+import org.openqa.selenium.By;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.slf4j.LoggerFactory;
 
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class RegistrationPageTest extends BasePageTest {
     MainPage mainPage;
@@ -15,7 +21,7 @@ public class RegistrationPageTest extends BasePageTest {
     LoginPage loginPage;
     String userName = "Martin";
     String userPassword = "Martin159";
-    String userEmail = "martin321@gmail.com";
+    String existingUserEmail = "martin321@gmail.com";
     String shortUserPassword = "123";
     String wrongUserName = "aaa";
 
@@ -35,6 +41,7 @@ public class RegistrationPageTest extends BasePageTest {
         registrationPage.enterPassword(userPassword);
         registrationPage.enterConfirmPassword(userPassword);
         registrationPage.clickRegisterButton();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[.='Register']")));
 
         assertEquals("Register", registrationPage.getRegistrationElementText(), "Registration elementText should be 'Register'");
         assertEquals("User account created successfully", successfullyRegistrationPage.getRegistrationConfirmationMessage(), "Successfully registration should have this message 'User account created successfully'");
@@ -52,7 +59,7 @@ public class RegistrationPageTest extends BasePageTest {
         loginPage = new LoginPage(driver);
 
         mainPage.clickCreateAccountButton();
-        registrationPage.enterEmailAddress(userEmail);
+        registrationPage.enterEmailAddress(existingUserEmail);
         registrationPage.enterName(userName);
         registrationPage.enterPassword(userPassword);
         registrationPage.enterConfirmPassword(userPassword);
@@ -98,5 +105,37 @@ public class RegistrationPageTest extends BasePageTest {
         log.info("Error message displayed. Test - PASSED!!");
 
     }
+    @ParameterizedTest
+    @CsvFileSource(resources = "/registration_data.csv", numLinesToSkip = 2)
+    void userRegistrationWithCsvFile(String emailCsv, String nameCsv, String passwordCsv, String passwordConfirmCsv, String messageErrorCsv) {
+        mainPage = new MainPage(driver);
+        registrationPage = new RegistrationPage(driver);
+
+        mainPage.clickCreateAccountButton();
+        registrationPage.enterEmailAddress(emailCsv);
+        registrationPage.enterName(nameCsv);
+        registrationPage.enterPassword(passwordCsv);
+        registrationPage.enterConfirmPassword(passwordConfirmCsv);
+        registrationPage.clickRegisterButton();
+
+
+        assertTrue(registrationPage.isErrorMessageDisplayed(messageErrorCsv), "Error message: " + messageErrorCsv);
+//        assertEquals(,registrationPage.isMessageCsv(messageErrorCsv), "Error messages is equal ");
+        System.out.println("Error message: " + messageErrorCsv);
+        log.info("Parameterized Tests - PASSED!!");
+    }
+
+    @Test
+    void userEmptyRegistration(){
+        mainPage = new MainPage(driver);
+        registrationPage = new RegistrationPage(driver);
+
+        mainPage.clickCreateAccountButton();
+        registrationPage.clickRegisterButton();
+        assertTrue(registrationPage.isRegistrationFormEmpty());
+        log.info("Empty registration show up all required error messages - PASSED!!");
+    }
 
 }
+
+

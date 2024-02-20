@@ -1,0 +1,22 @@
+E-mail,Name,Password,PasswordConfirmation,ErrorMessage
+emailCsv,nameCsv,passwordCsv,passwordConfirmCsv,messageErrorCsv
+invalid@yahoo,ValidName,ValidPassword123,ValidPassword123,Email address is invalid
+invalid.yahoo.co.uk,ValidName,ValidPassword123,ValidPassword123,Email address is invalid
+invalidyahoo.co.uk,ValidName,ValidPassword123,ValidPassword123,Email address is invalid
+invalid@@yahoo.co.uk,ValidName,ValidPassword123,ValidPassword123,Email address is invalid
+*,ValidName,ValidPassword123,ValidPassword123,Email address is invalid
+10,ValidName,ValidPassword123,ValidPassword123,Email address is invalid
+ ,ValidName,ValidPassword123,ValidPassword123,Email address is required
+valid@yahoo.co.uk,kis,ValidPassword123,ValidPassword123,User name should be between 4 and 30 characters
+valid@yahoo.co.uk,InvalidName123456789012345678901234567890123456789012345678901234567890,ValidPassword123,ValidPassword123,User name should be between 4 and 30 characters
+valid@yahoo.co.uk,**,ValidPassword123,ValidPassword123,User name should be between 4 and 30 characters
+valid@yahoo.co.uk,999,ValidPassword123,ValidPassword123,User name should be between 4 and 30 characters
+valid@yahoo.co.uk, ,ValidPassword123,ValidPassword123,User name is required
+valid@yahoo.co.uk,ValidName,*,*,Password should be between 6 and 30 characters
+valid@yahoo.co.uk,ValidName,10,10,Password should be between 6 and 30 characters
+valid@yahoo.co.uk,ValidName,ValidPassword,ValidPassword,Password should be between 6 and 30 characters
+valid@yahoo.co.uk,ValidName,InvalidPas,ValidPassword,Password should be between 6 and 30 characters
+valid@yahoo.co.uk,ValidName,ValidPassword123,ValidPass,Password should be between 6 and 30 characters
+valid@yahoo.co.uk,ValidName,ValidPassword123,InvalidPassword,Passwords don't match!
+valid@yahoo.co.uk,ValidName, ,ValidPassword123,Password is required
+valid@yahoo.co.uk,ValidName,ValidPassword123, ,Confirm Password is required
