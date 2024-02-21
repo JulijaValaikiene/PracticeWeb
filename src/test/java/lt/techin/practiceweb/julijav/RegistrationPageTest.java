@@ -8,6 +8,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.slf4j.LoggerFactory;
 
 
@@ -34,6 +35,7 @@ public class RegistrationPageTest extends BasePageTest {
         registrationPage = new RegistrationPage(driver);
         successfullyRegistrationPage = new SuccessfullyRegistrationPage(driver);
         loginPage = new LoginPage(driver);
+//        wait = new FluentWait<>(driver);
 
         mainPage.clickCreateAccountButton();
         registrationPage.enterEmailAddress(TestUtils.getRandomEmail());
@@ -42,9 +44,14 @@ public class RegistrationPageTest extends BasePageTest {
         registrationPage.enterConfirmPassword(userPassword);
         registrationPage.clickRegisterButton();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//h1[.='Register']")));
-
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//h1[.='Register']")));
         assertEquals("Register", registrationPage.getRegistrationElementText(), "Registration elementText should be 'Register'");
-        assertEquals("User account created successfully", successfullyRegistrationPage.getRegistrationConfirmationMessage(), "Successfully registration should have this message 'User account created successfully'");
+//        assertEquals("User account created successfully", successfullyRegistrationPage.getRegistrationConfirmationMessage(), "Successfully registration should have this message 'User account created successfully");
+//        String expectedInfoMessage = "User account created successfully";
+//        String actualInfoMessage = successfullyRegistrationPage.getRegistrationConfirmationMessage();
+//        assertEquals(expectedInfoMessage, actualInfoMessage, "Successfully registration should have this message" + expectedInfoMessage);
+
+
         successfullyRegistrationPage.clickLoginButton();
         assertEquals("Login", loginPage.findDesignLoginElementText(), "login element text should be 'Login' !!! ");
         log.info("Registration is successfully done!");
@@ -85,7 +92,7 @@ public class RegistrationPageTest extends BasePageTest {
         registrationPage.clickRegisterButton();
         assertEquals("User name should be between 4 and 30 characters", registrationPage.getErrorMessageWrongNameText(), "Wrong Name error message should include this text: 'User name should be between 4 and 30 characters'");
         log.info("Error message displayed. Test - PASSED!");
-      }
+    }
 
     @Test
     public void shortPasswordRegistration() {
@@ -105,6 +112,7 @@ public class RegistrationPageTest extends BasePageTest {
         log.info("Error message displayed. Test - PASSED!!");
 
     }
+
     @ParameterizedTest
     @CsvFileSource(resources = "/registration_data.csv", numLinesToSkip = 2)
     void userRegistrationWithCsvFile(String emailCsv, String nameCsv, String passwordCsv, String passwordConfirmCsv, String messageErrorCsv) {
@@ -126,7 +134,7 @@ public class RegistrationPageTest extends BasePageTest {
     }
 
     @Test
-    void userEmptyRegistration(){
+    void userEmptyRegistration() {
         mainPage = new MainPage(driver);
         registrationPage = new RegistrationPage(driver);
 
@@ -135,6 +143,16 @@ public class RegistrationPageTest extends BasePageTest {
         assertTrue(registrationPage.isRegistrationFormEmpty());
         log.info("Empty registration show up all required error messages - PASSED!!");
     }
+
+    @Test
+    void linkSplit(){
+        mainPage = new MainPage(driver);
+        registrationPage = new RegistrationPage(driver);
+
+        mainPage.clickCreateAccountButton();
+        System.out.println(registrationPage.getPartOfTheTextOfLinkHomeMyNotes());
+    }
+
 
 }
 

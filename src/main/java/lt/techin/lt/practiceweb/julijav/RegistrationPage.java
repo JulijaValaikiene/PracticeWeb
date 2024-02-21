@@ -40,6 +40,18 @@ public class RegistrationPage extends BasePage {
     WebElement errorMessageWrongName;
 
 
+    @FindBy(xpath = "//a[@href='/notes/app/']")
+    WebElement linkHomeMyNotes;
+
+    public String getTextOfLinkHomeMyNotes(){
+        return linkHomeMyNotes.getText();
+    }
+
+    public String getPartOfTheTextOfLinkHomeMyNotes() {
+        return getTextOfLinkHomeMyNotes().split(" - ")[1].trim();
+    }
+
+
     public void enterEmailAddress(String userEmail) {
         emailInput.sendKeys(userEmail);
     }
